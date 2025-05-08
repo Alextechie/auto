@@ -3,7 +3,7 @@ import { signupSchema } from "../../utils/zodSchema";
 import { findUser, createUser } from "../../models/auth/userModel";
 import { hash } from "../../utils/lib";
 
-export const userController = async (req: Request, res: Response): Promise<any> => {
+export const signUpController = async (req: Request, res: Response): Promise<any> => {
     // request the data
     const data = req.body;
 
