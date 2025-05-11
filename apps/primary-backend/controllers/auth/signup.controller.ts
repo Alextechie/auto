@@ -11,7 +11,7 @@ export const signUpController = async (req: Request, res: Response): Promise<any
     const parsedInputs = signupSchema.safeParse(data);
 
     if(!parsedInputs.success) {
-        return res.json({
+        return res.status(400).json({
             message: "Invalid inputs",
             error: parsedInputs.error.format
         })
@@ -35,7 +35,7 @@ export const signUpController = async (req: Request, res: Response): Promise<any
 
         return res.status(201).json({
             message: "User created successfully",
-            info: user
+            user
         })
     }catch(err){
         return res.status(500).json({

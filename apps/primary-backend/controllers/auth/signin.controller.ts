@@ -11,7 +11,7 @@ export default async function signInController(req: Request, res: Response): Pro
     // input validation
     const parsedInputs = siginSchema.safeParse(data);
     if(!parsedInputs.success){
-        return res.json({
+        return res.status(400).json({
             message: "Invalid Inputs",
             error: parsedInputs.error.formErrors
         })
@@ -22,7 +22,7 @@ export default async function signInController(req: Request, res: Response): Pro
         const exists = await findUser(email);
 
         if (!exists){
-            return res.json({
+            return res.status(409).json({
                 message: "User does not exist"
             })
         }
@@ -34,7 +34,7 @@ export default async function signInController(req: Request, res: Response): Pro
         const matches = await compare(password, hash);
 
         if(!matches){
-            return res.json({
+            return res.status(409).json({
                 message: "Your password does not match"
             })
         }
@@ -49,13 +49,16 @@ export default async function signInController(req: Request, res: Response): Pro
         const token = generateToken(profile, duration);
 
         // pass this token into a cookie
-        setAuthCookie(res, token, "/")
+        setAuthCookie(res, token, "/");
+
+        
         return res.status(200).json({
-            message: "Logged in successfully"
+            message: "Logged in successfully",
+            email
         })
 
     } catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message: "Internal server error",
             error: err
         })
